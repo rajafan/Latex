@@ -1,0 +1,73 @@
+\documentclass[12pt, landscape]{beamer}
+
+\usepackage{colortbl}
+
+\usetheme{Warsaw}
+
+\title[Making a \LaTeX Presentation Using Beamer]{Introduction to Beamer \\ How to make a presentation with \LaTeX}
+\author{Cheng Fan}
+\institute{The Hong Kong Polytechnic University}
+\date{\today}
+
+
+\begin{document}
+
+\begin{frame}
+ \titlepage
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{This is a short intro to Beamer class}
+ 
+ \begin{itemize}
+  \pause \item Beamer is a wonderful class
+  \pause \item One can make animations
+  \pause \item One uses the \textbf{pause} command, for example
+  \pause \item in order to bring in important ideas
+ \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{The Second page of the PPT}
+ 
+ \begin{block}{Block title}
+  \begin{tabular}{lcccc}
+  Class & A & B & C & D \\\hline
+  X     & 1 & 2 & 3 & 4 \pause\\
+  Y     & 3 & 4 & 5 & 6 \pause\\
+  Z     & 5 & 6 & 7 & 8
+\end{tabular}
+ \end{block}
+\end{frame}
+
+\begin{frame}{Example of columns}
+     \begin{columns}[T] 
+     \begin{column}[T]{5cm} 
+     Contents of first column \\ split into two lines
+     \end{column}
+     \begin{column}[T]{5cm} 
+     Contents of second column \\ split into two lines
+     \end{column}
+     \end{columns}
+\end{frame}
+
+\begin{frame}
+ \begin{block}{This is a Block}
+      This is important information
+ \end{block}
+ 
+ \begin{alertblock}{This is an Alert block}
+   This is an important alert
+ \end{alertblock}
+ 
+ \begin{exampleblock}{This is an Example block}
+   This is an example 
+ \end{exampleblock}
+\end{frame}
+
+
+\end{document}
+

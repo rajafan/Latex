@@ -1,0 +1,59 @@
+\documentclass[14pt]{article}
+
+\usepackage{fullpage}
+
+\usepackage{times} 
+
+\usepackage[pdftex]{graphicx}
+
+\usepackage[pdftex]{hyperref}
+
+\renewcommand{\baselinestretch}{1.25}
+
+\begin{document}
+
+\title{Summary of writing a paper with \LaTeX}
+\author{Cheng Fan\\ Li Xinlu}
+\date{}
+\maketitle
+
+\tableofcontents
+
+\section{Keypoints} \label{Keys}
+
+\begin{enumerate}
+ \item \texttt{\textbackslash documentclass\{\}} have five possible values, i.e., \textbf{book, report, article, slides, letter}.
+ 
+ \item The alternative inputs of \texttt{\textbackslash documentclass[]} can specify the font size, twocolumn or onecolumn.
+
+ \item One or more blank lines in \LaTeX{} means to start a new paragraph.
+ 
+ \item The spacing can be specified in the preamble area with the following: \texttt{\textbackslash renewcommand\{\textbackslash baselinestretch\}\{\emph{Factor}\}}. \emph{Factor} is defined in the following way, 1 means single-spacing, 1.25 means the traditional one and a half spacing, 1.667 means the traditional double-spacing.
+ 
+ \item The figures can be included one the package \emph{graphicx} is defined in the preamble area. An example to include a figure file is as follows: \texttt{\textbackslash centerline\{\textbackslash includegraphics\{figure.jpg\}\}}
+ 
+ \item Hypertext links can be added between Table of Contents, bibliographies and page-references. It should be defined in the preamble area as follows: \texttt{\textbackslash usepackage[pdftext]\{hyperref\}}
+ 
+ \item Add \texttt{\textbackslash tableofcontents} after the \texttt{\textbackslash maketitle\{\}} to create the 'Table of Contents'.
+
+\end{enumerate}
+
+
+\section{About references and citations}
+
+\begin{enumerate}
+ \item The reference to a section can be made as follows. First, add \texttt{\textbackslash label\{\}} following the section title. Then use \texttt{\textbackslash ref\{\}} to make reference to it, e.g., Please see section \ref{Keys} for details.
+ 
+ \item The references are listed at the end of the file, before the \texttt{\textbackslash end\{document\}}. Then, refer to the reference by using \texttt{\textbackslash cite\{\}}, e.g., Some details are recorded in \cite{A} and \cite{B}.
+
+\end{enumerate}
+
+
+\begin{thebibliography}{9}
+ \bibitem{A} Joe Struss, A new paper, Energy and Buildings 34 (1) (2013) 1-10.
+ 
+ \bibitem{B} Cheng Fan, A second paper, Applied Energy 1 (10) (2015) 2-11.
+\end{thebibliography}
+
+\end{document}
+

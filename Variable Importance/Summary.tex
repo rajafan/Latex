@@ -1,0 +1,52 @@
+\documentclass[14pt]{article}
+\usepackage[left=1 in, right=1 in, top=1 in, bottom=1 in]{geometry}
+
+\begin{document}
+
+\title{Using R to evaluate the variable importance}
+\date{\today}
+\maketitle
+
+This summary reviews the keypoints in the paper "A new, conditional variable-importane measure for random forests available in the package party" by Strobl, C., Hothorn, T., and Zeileis, A., 2009.
+
+\begin{enumerate}
+ \item Function \texttt{cforest} in the R package \texttt{party}. The resulting forests are unbiased and thus preferable to the \texttt{randomForest} implementation available in the R pacakge \texttt{randomForest} if the predictors are of different types. A conditional permutation importance measure has been added to the \texttt{party} package, which helps to evalute the importance of correlated predictors. 
+ 
+ \item Recursive partitioning methods are amongst the most popular and widely used statistical learning tools for non-parametric regression and classification.
+ 
+ \item The scope of recursive partitioning methods in R:
+  \begin{itemize}
+   \item Standard classification and regression trees in the R package \texttt{rpart}.
+   \item Random forests in the R package \texttt{randomForest}.
+   \item Unbiased tree algorithm in the R package \texttt{party}. Useful functions include \texttt{ctree} and \texttt{cforest}.
+  \end{itemize}
+
+ \item The major weak spot of classical approaches in \texttt{rpart} and \texttt{randomForest} is the variable-selection bias, which refers to the fact that in standard tree algorithms, variable selection is biased in favor of variables offering many potential cut-poiints, so that variables with many categories and continuous variables are artificially preferred.
+ 
+ \item The variable importance is usually evaluated using the measures such as Gini importance, the mean decrease in accuracy or permutation importance. The Gini importance is accessible in the \texttt{randomForest} with \texttt{importance(obj, type=2)}. Noted that for variables of different types, such measure is biased in favor of continuous variables and variables with many categories.
+ 
+ \item Permutation importance or the mean decrease in accuracy is accessible in both \texttt{randomForest} and \texttt{party}, e.g., \texttt{randomForest::importance(obj, type=1)} or \texttt{party::varimp(obj)}. Note that for variables of different types, unbiased measure is only achieved when subsampling is used as in \texttt{cforest(controls=cforest\_ unbiased())}.
+  
+ \item Permutation importance is a reliable measure for \emph{uncorrelated} predictors when sub-sampling without replacement (instead of bootrap sampling). This is the default setting for \texttt{party::cforest\_ control} as \texttt{party::cforest\_ unbiased}. 
+ 
+ \item The rationale of the original permutation importance is as follows: by randomly permuting the predicotr varibale $X_j$, its original association with the response $Y$ is broken. When the permuted $X_j$ and the remaining non-permuted predictors are used to predict the response for the out-of-bag observations, the prediction accuracy will decrease substantially if the original variable $X_j$ was associated with the response $Y$. Thus, Breiman (2001) suggests the difference in prediction accuracy before and after permuting $X_j$, averaged over all trees, as a measure for variable importance.
+
+ \item Suggestions are as follows:
+  \begin{itemize}
+   \item If predicotrs are of different types, then use \texttt{party::cforest} with default option \texttt{controls=cforest\_ unbiased()}. Then use \texttt{party::varimp()}.
+   \item Otherwise, feel free to use \texttt{party::cforest} with \texttt{party::varimp}; or \texttt{randomForest::randomForest} with \texttt{importance(obj, type=1)} or \texttt{importance(obj, type=2)}. Note always set \texttt{scale=FALSE}.
+   \item If predictors are highly correlated, use \texttt{party::cforest} with \texttt{party:varimp(conditional=TRUE)}.
+   \item Always check whether the result is the same with a different random seed. If the ranking is dependent on the random seed, try to increase the number of trees \texttt{ntree} in \texttt{randomForest} and \texttt{cforest\_ control}.
+   
+  \end{itemize}
+\end{enumerate}
+
+
+
+
+\end{document}
+
+
+
+
+

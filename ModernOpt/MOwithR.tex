@@ -1,0 +1,173 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[left=1in, right=1in, bottom=1in, top=1in]{geometry}
+\usepackage{graphicx}
+
+\begin{document}
+\title{Book Review of Modern Optimization with R} 
+\author{Paulo Cortez}
+\maketitle
+
+\section{Chapter 1 on Mar 10, 2015}
+
+\begin{enumerate}
+ \item Modern optimization, also known as meta-heuristics, is related with general purpose solvers based on computational methods that use few domain knowledge, iteratively improving an initial solution to optimize a problem. 
+ \item The modern methods are useful for solving complex problems for which no specialized optimization algorithm has been developed, such as the problems with discontinuities, dynamic changes, multiple objectives or hard and soft restrictions.
+\item When considering numeric functions, the shape can be convex or non-convex, with several local minimal or maximal. Convex tasks are much easier to solve and there are specialized algorithms (e.g., least squares, linear programming) that are quite effective for handling such problems. However, many practical problems are non-convex, often including noisy or complex function landscapes, with discontinuities. Optimization problems can even be dynamic, changing through time. For all these complex problems, an interesting alternative is to use modern optimization algorithms that only search a subset of the search space but tend to achieve near optimum solutions in a reasonable time. 
+
+\begin{figure}
+\caption{Convex and non-convex problems}
+\centering
+ \includegraphics{a}
+\end{figure}
+
+\item The classification of optimization methods
+ \begin{itemize}
+ \item The type of guided search, i.e., blinded or guided. The former assumes the exhaustion of all alternatives while the latter uses previous searches to guide current search. Modern optimization methods use a guided search, which is often subdivided into two categories, i.e., local, which searches within the neighborhood of an initial solution; global, which uses a population of solutions.
+ \item The search is deterministic or stochastic based. 
+ \item Whether the method is inspired by physical or biological processes
+ 
+ \begin{figure}
+ \caption{Classification of optimization methods presented in this book}
+ \centering
+ \includegraphics{b.png}
+ \end{figure} 
+ \end{itemize}
+
+\end{enumerate}
+
+\section{Chapter 3 on Mar 10, 2015}
+\begin{enumerate}
+\item Full blind search assumes the exhausion of all alternatives, where any previous search does not affect how next solutions are tested. It is guaranteed that the optimum solution can be found as the full search space will be examined. 
+
+\item The major disadvantage of pure blind search is that it is not feasible when the search space is continuous or too large, a situation that often occurs with real-world tasks. 
+
+\item Grid search reduces the space of solutions by implementing a regular hyper dimensional search with a given step size. Depending on the step size, grid search can be much faster than pure blind search. The main disadvantage of the grid search approach is that it suffers from the curse of dimensionality. In addition, one has to determine the values of various parameters, e.g., grid search step, number of nested levels. 
+
+\item Monte Carlo is a versatile numerical method that is easy to implement and is applicable to high-dimensional problems (in contrast with grid search). Note that it is a stochastic method and each run may result in different outcomes.
+
+\end{enumerate}
+
+\section{Chapter 4 on Mar 10, 2015}
+
+\begin{enumerate}
+\item Local search is often termed as single-state search, includes several methods that focus their attention within a local neighborhood of a given initial solutions. A prior knowledge, such as problem domain heuristics, can be used to set the initial solution. A more common approach is to set the initial point randomly and perform several restarts.
+
+\item Hill climbing is a simple local optimization method that "climb" up the hill until a local optimum is found (assuming a maximization problem). It works by iteratively searching for new solutions within the neighborhood of current solution, adopting new solutions if they are better. It is worth mentioning that standard hill climbing is deterministic; however, when random changes are used for perturbing a solution, a stochastic behavior is achieved. This is why in Fig.2, hill climbing is set at the middle of deterministic and stochastic dimension. 
+
+\item Simulated annealing is a variation of the hill climbing technique. This single-state method differs from the hill climbing search by adopting a control temperature parameter ($T$) that is used to compute the probability of accepting inferior solutions. In contrast to the stochastic hill climbing method, which adopts a fixed value for $T$, the simulated annealing uses a variable temperature value during the search. The method starts with a high temperature and then gradually decreases the control parameter until a small value is achieved.
+
+\item Tabu search is a variation of the hill climbing method that includes a tabu list of length $L$, which stores the most recent solutions that become "tabu" and thus cannot be used when selecting a new solution. The intention is to keep a short-term memory of recent changes, preventing future moves from deleting these changes. Tabu search was devised for discrete spaces and combinatorial problems (e.g. traveling salesman problem). However, the method can be extended to work with real valued points if a similarity function is used to check if a solution is very close to a member of the tabu list. 
+
+\end{enumerate}
+
+\section{Chapter 5 on Apr 5, 2015}
+
+\begin{enumerate}
+
+ \item The population based search uses a pool of candidate solutions rather than a single search point. It tends to be more computational heavy, but often works better as a global optimzation method. It can quickly finds out the interesting regions of the search space.
+ 
+ \item The main differences between population based methods are as follows:
+  \begin{itemize}
+   \item How solutions are represented and what attributes are stored for each search point
+   \item How new solutions are created
+   \item How the best population individuals are selected
+  \end{itemize}
+  
+ \item Most population based methods are naturally inspired. The natural phenomena include genetics, natural selection, collevtive behavior, which have led to the optimization techniques such as genetic and evolutionary algorithms, genetic programming, estimation of distribution, differential evolution, and particle swarm optimization.
+ 
+ \item Genetic and evolutionary algorithms
+  \begin{itemize}
+   \item Genetic algorithms were proposed by Holland in 1975. The original method only worked on binary reresentations and relied mainly on crossover operator. 
+   \item Evolutionary algorithm was used to address gentic algorithm variants that include real value representations and relied on both crossover and mutation operators.
+   \item In R, the genetic/evolutioanry algorithms can be performed using the pacakge \texttt{genalg}. The funtion \texttt{rbga.bin} is used for binary chromosomes and \texttt{rbga} is for real value representations. 
+  \end{itemize}
+ 
+ \item Differential evolution
+  \begin{itemize}
+   \item Differential evolution is a global serach strategy that tends to work well for continuous numerical optimization and was proposed by Storn and Price in 1997.
+   \item The main difference between differential evolution and evolutionary algorithms is that differential evolution uses arithmetic operator to generate new solutions, instead of the classical crossover and mutation operators.  
+   \item The differential mutation operators are based on vector addition and subtraction, thus only working in metric spaces, e.g., boolean, integer or real values.
+   \item In R, differential evolution can be performed using the package \texttt{DEoptim}. 
+   \item \textit{CR} controls the fraction of values that are mutated. \textit{F} is a positive scaling factor, ranging from 0 to 2 (normally less than 1). 
+   \item Price et al. (2005) advice the following general configurations for the differential evolution parameters: 
+   $$F=0.8$$
+   $$CR=0.9$$ 
+   $$PopulationSize = 10 SolutionLength$$
+  \end{itemize}
+
+ \item Particle swarm optimization
+  \begin{itemize}
+   \item Swarm intelligence denotes a family of algorithms, including the ant colony and parricle swarm optimization. These algorithms assume that a population of simple agents with direct or indirect interactions that influence future behaviors. While each agent is independent, the whole swarm tends to produce a self-organized behavior, which is the essence of swarm intelligence.
+   \item Particle swarm optimization was proposed by Kennedy and Eberhart in 1995 for numerical optimization. 
+   \item In R, the algorithm can be performed using the package \texttt{pso}.
+   \item Some differences exist between SPSO 2007 and SPSO 2011. In 2007, the population size is automatically defined as the integer art of $10 + 2\sqrt{L_s}$, where $L_s$ denotes the length of a solution. In 2011, the population size is user defined, with a suggested value of 40. 
+  \end{itemize}   
+  
+ \item Estimation of distribution algorithm (EDA)
+  \begin{itemize}
+   \item EDAs are proposed by Larranaga and Lozano in 2002, which combine the ideas from evolutionary computation, machine learning, and statistics. 
+   \item It works by iteratively estimating and sampling a probability distribution that is built from promising solutions. While other population based methods create new individuals using an implicit distribution function, EAD uses an explicit probability distribution defined by a model class (e.g. normal distribution) to create new individuals. The main advantage is the search distribution may encode dependencies between the domain problem parameters, thus performing a more effective search.
+   \item EDA can be performed using the package \texttt{copulaedas}.
+  \end{itemize}
+ 
+ \item Two strategies for handling constraints
+  \begin{itemize}
+   \item Death penalty and repair are two strategies for handling constraints. Death penalty is a simple strategy which changes the evaluation function to a very high penalty value if the solution is infeasible. However, such strategy is not efficient as the infesible solutions do not guide the search. The repair strategy is more efficient, as it transforms an infeasible solution into a feasible one, but often requires more domain knowledge.
+   \item A local search is usually used to perform the repair strategy. The performance ususally outperforms the death penalty strategy. However, it requires domain expertise.
+  \end{itemize}
+  
+ \item Genetic programming
+  \begin{itemize}
+   \item It denotes a collection of evolutionary computation methods that automatically generate computer programs. The computer programs have a variable length and are based on lists or trees. Instead of numerical optimization, genetic programming is used for automatic programming or discovering mathematical functions.
+   \item Two main mutation types, i.e., replacing a randomly selected value or function by another random value or function; and replacing a randomly selected subtree by another generated subtree. 
+   \item The classical crossover works by replacing a random subtree from a parent solution by another random subtree taken from a second parent solution. 
+   \item Useful R package is \texttt{rpg}.
+  \end{itemize}
+
+\end{enumerate}
+
+\section{Chapter 6 on April 6, 2015}
+
+\begin{enumerate}
+ \item There are three main approaches to handle multi-objective tasks, i.e., weighted-formular, lexicographic and Pareto front.
+ 
+ \item Weighted-formula approach
+  \begin{itemize}
+   \item The weighted-formula approach is also known as priori approach. It is the simplest approach to handle multi-objectives. The approach first assigns weights to each goal and then optimizing a quality Q measure that is usually set using an additive or multiplicative formula, e.g.:
+   $$Q=w_1 \times g_1 + w_2 \times g_2 + \cdots + w_n \times g_n$$
+   $$Q=g_1^{w_1} \times g_2^{w_2} \times \cdots \times g_n^{w_n}$$   
+   \item The disadvantages are as follows:
+    \begin{itemize}
+     \item[1] Setting the ideal weights is often difficult and thus weights tend to be set ad-hoc (e.g., based on intuition). 
+     \item[2] Optimizing with a different combination of $w$ requires the execution of a new optimization procedure.
+     \item[3] Even if the weights are correctly defined, the search will miss trade-offs that might be interesting for the user. In particular, the linear combination (as in the additive format) limits the search for solutions in a non-convex region of the Pareto front. 
+     
+     \centering{\includegraphics[scale=.6]{c}}
+    \end{itemize}
+  \end{itemize}
+ 
+ \item Lexicographic approch
+  \begin{itemize}
+   \item Under this approach, different priority are assigned to different objectives, such that the objectives are optimized in their priority order. 
+   \item When comparing the solutions, first the evaluation measure for the highest-priority objective is compared. If the first solution's performance is significantly better than the second, then the former is chosen. Otherwise, continue to compare the second ranked priority objective. The process is repeated until a clear winner is found. If no clear winner, then the solution with the best highest-priority objective can be selected.
+   \item Compared to the weighted-formula approach, it avoids the problem of mixing non-commensurable criteria, as it treats each criterion separately. The diadvantage is that it requires prior knowledge to define priority and tolerance threshold, which are similarly to the weighted-formula are set ad-hoc.
+  \end{itemize}
+ 
+ \item Pareto approach
+  \begin{itemize}
+   \item A solution $S_1$ dominates a solution $S_2$ if $S_1$ is better than $S_2$ in one objective and as least as good as $S_2$ in all other objectives. A solution $S_i$ is non-dominated if there is no solution $S_j$ that dominates $S_i$. The Pareto front contains all non-dominated solutions.
+   \item Pareto multi-objective returns a set of non-dominated solutions(from the Pareto front), rather than just a single solution.
+   \item It is a more natural method, providing the user a set of distinct and interesting solutions and the user uses his posterior knowledge to decide which one to use. There is no need to set ad-hoc weights or tolerance values as used in weighted-fomula or lexicographic approaches. 
+   \item The drawback of this method is that it tends to be more complex and has a larger search space to be explored.
+   \item Examples of standard evolutionary multi-objective approaches include the strength Pareto evolutionary algorithm 2 (SPEA-2) and non-dominated sorting genetic algorithm-II (NSGA-II).
+   \item Multi-objective evolutionary algorithms (MOEA) often use Pareto-based ranking schemes, where individulas in the Pareto front are rank 1, then the front solutions are removed and the individuals from the new front are rank 2, and so on.
+   \item The NSGA-II algorithm is implemented by the package \texttt{mco}, using the function \texttt{nsga2}. It works with numerical values. NSGA-II is an evolutionary algorithm variant specifically designed for multi-objective tasks and uses three useful concepts, i.e., Pareto front ranking, elitism, and sparsity. 
+  \end{itemize}
+\end{enumerate}
+
+\section{Chapter 7 on April 6, 2015}
+\begin{enumerate}
+ \item Non-deterministic polynomial (NP)-complete problem means that there is no algorithm capable of reaching the optimum solution in a polynomial time (in respect to n) for all possible Traveling Saleman Problem (TSP) intances of size n.
+\end{enumerate}
+
+\end{document}
