@@ -1,0 +1,294 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[left=1in, right=1in, bottom=1in, top=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb}
+
+\begin{document}
+
+\title{Notes of Pattern Discovery in Data Mining} 
+\author{Jiawei Han}
+\maketitle
+
+\section{Week 1 on May 11 2015}
+
+\subsection{Introduction}
+
+\begin{enumerate}
+
+\item Data mining can be viewed from multiple angles, i..e, multi-dimensional view
+ \begin{itemize}
+  \item Data to be mined
+  \item Knowledge to be mined
+  \item Methodologies or techniques utilized
+  \item Applications adapted
+ \end{itemize}
+
+\item From data view
+ \begin{itemize}
+  \item Structured and semi-structured data, e.g., relational data/object-relational data, data warehouse data, and transactional data 
+  \item Unstructured data, e.g., text and web data, spatial and spatial-temporal data, multi-media data, data streams and sensor data, time-series data, graphs, social networks and information networks
+ \end{itemize}
+
+\item From knowledge view
+ \begin{itemize}
+  \item Data summary in multidimensional space, e.g., data cube and OLAP (online analytical processing)
+  \item Pattern discovery, e.g., frequent patterns, association and correlations
+  \item Classification and predictive modeling
+  \item Cluster analysis
+  \item Outlier analysis
+  \item Trend and evolution analysis
+ \end{itemize}
+ 
+\item From methodology or technique view: DM is a multi-disciplinary subject, including statistics, machine learning, pattern recognition, visualization, algorithms, database technology, and distributed/cloud computing.
+
+\item From application view
+ \begin{itemize}
+  \item Mining text data and web pages
+  \item Mining business data
+  \item Mining biological and medical data
+  \item Mining social and information networks
+  \item Invisible data mining
+ \end{itemize}
+\end{enumerate}
+
+\subsection{Basic concepts of pattern discovery}
+\begin{enumerate}
+
+\item Patterns are a set of items, subsequences, and substructures that frequently occur together in a data set.
+
+\item Pattern discovery aims to find the inherent regularities in a data set and it is the foundation of many essential data mining tasks, e.g., association, correlation, causality analysis, sequential patterns, classification (discriminative pattern-based analysis).
+
+\item Conventional association rules has the format of $X \rightarrow Y$, where support probability of this rule is $X \cup Y$ and the confidence is $\frac{P(X \cup Y)}{P(X)}$. Note that the support of the rule is denoted as $P(X \cup Y)$, meaning the count of both $X$ and $Y$ occurs, but not $X \cap Y$, as it will be $\emptyset$.
+
+\item Compression forms
+\begin{itemize}
+\item A pattern (itemset) $X$ is a closed-pattern if X is frequent, and there is no super-pattern $Y \supset X$, with the same support of $X$. A closed pattern is a lossless compression of frequent patterns. The sub-pattern of a closed pattern has the same support.
+
+\item A pattern is a max-pattern if $X$ is frequent and there is no frequent super-pattern $Y \supset X$. It is a lossy compression of frequent patterns and the sub-pattern of a max-pattern is unknown.
+
+\item Mining closed-patterns is more desired than mining max-patterns.
+\end{itemize}
+\end{enumerate}
+
+\subsubsection{Efficient pattern mining methods}
+\begin{enumerate}
+\item The downward closure property (a.k.a. Apriori) of frequent patterns: Any subset of a frequent itemset is frequent. If any subset of an itemset $S$ is infrequent, then $S$ is infrequent.
+\begin{itemize}
+\item Level-wise, join-based approach (Apriori, 1994)
+\item Vertical data format approach (Eclat, 1997)
+\item Frequent pattern projection and growth (FP-growth, 2000)
+\end{itemize}
+
+\item The Apriori algorithm
+\begin{itemize}
+\item Procedures 
+ \begin{itemize}
+   \item Scan database once to get frequent 1-itemset.
+   \item Repeat: generate candidate itemsets of length $k+1$ from the frequent itemsets of length $k$. Then test the candidate to generate frequent itemsets of length $k+1$.
+   \item Until no frequent or candidate set can be generated.
+   \item Return all the frequent itemsets of different lengths.
+ \end{itemize}
+
+\item How to generate candidates, i.e., self-joining and pruning. Self-joining generate candidates of length $k+1$ by combining two frequent itemsets of length $k$. Pruning deletes candidates of length $k+1$ if infrequent subset exists.
+
+\item Improvements of Apriori
+\begin{itemize}
+ \item Reduce the passes of transaction database scans
+  \begin{itemize}
+   \item Partitioning: Any itemset that is potentially frequent must be frequent in at least one of the partitions of transactional database (TDB). It scans the database only twice.
+   \begin{itemize}
+    \item Scan 1: Partition the database and find local frequent patterns
+    \item Scan 2: Consolidate global frequent patterns
+   \end{itemize}
+  \item Dynamic itemset counting
+ \end{itemize}
+ 
+ \item Shrink the number of candidates, e.g., direct hashing and pruning.
+ 
+ \item Exploring special data structures  
+  
+\end{itemize}
+\end{itemize}
+
+\item Exploring the vertical data format ECLAT (Equivalence Class Transformation); It is a depth-first search algorithm using set intersection
+ 
+\item FP-growth algorithm
+\begin{itemize}
+ \item Procedures 
+  \begin{itemize}
+   \item Find frequent single items and partition the DB based on each of them
+   \item Recursively grow frequent patterns by doing the above for each partitioned databse (a.k.a conditional database)
+   \item An efficient data structure FP-tree is constructed for efficient processing.
+  \end{itemize}
+  
+  \item Recursively construct and mine conditional FP-trees until the resulting FP-tree is empty, or until it contains only one path, which will generate all the combinations of its sub-paths, each of which is a frequent pattern.
+\end{itemize}
+
+\end{enumerate}
+
+\section{Week 2 on May 11 2015}
+\begin{enumerate}
+\item Interestingness measures
+  \begin{itemize}
+  \item Lift is more telling than support and confidence
+   \begin{itemize}
+   \item $Lift(B,C) = \frac{confidence(B \rightarrow C)}{support(C)} = \frac{support(B \cup C)}{support(B) \times support(C)}$
+   \item Lift=1 indicates independence
+   \item Lift $>$ 1 indicates positive correlation
+   \item Lift $<1$ indicates negative correlation
+   \end{itemize}
+   
+ \item $\chi ^2$ is used to test correlated events
+ \begin{itemize}
+  \item $\chi ^2=\sum \frac{(Observed - Expected)^2}{Expected}$
+  \item $\chi ^2=0 $ means independence 
+  \item $\chi ^2 >0$ means correlated, either positively or negatively.
+ \end{itemize}
+ 
+ \item Lift and $\chi ^2$ may not be good for transactions with large null-transactions. In such a case, null-invariant measures are more proper for use, e.g., Jaccard, Cosine, Kulczynski, AllConf and MaxConf.
+ \begin{itemize}
+ \item Null-invariant measures is crucial for massive data containing many null transactions
+ \item Imbalance-ratio and Kulczynski measures are promising to bring useful insights.
+ \end{itemize}
+
+\begin{table}
+\centering
+\begin{tabular}{| c | c | c | c |}
+\hline
+ & $milk$ & $\neg milk$ & $\sum_{row}$ \\
+$coffee$ & mc & $\neg m c$ & c \\
+$\neg coffee$ & $m \neg c$ & $\neg m \neg c$ & $\neg c$ \\
+$\sum_{col}$ & $m$ & $\neg m$ & $\sum$ \\ 
+\hline
+\end{tabular}
+\end{table} 
+\end{itemize}
+
+\item Other types of association rule mining
+\begin{itemize}
+\item Multi-level association rules
+
+\item Multi-dimensional association rules
+
+\item Quantitative association rules
+
+\item Mining negative associations
+ \begin{itemize}
+  \item Rare patterns are those with low support but interesting
+  \item Negative patterns indicate negative correlation.
+  \item How to distinguish these two patterns
+   \begin{itemize}
+    \item Support-based: If itemsets A and B are both frequent but rarely occur together, i.e., $sup(A \cup B) << sup(A) \times sup(B)$, then A and B are negatively correlated.Note that such measure's performance is poor for large null-transaction cases. Whether two itemsets A and B are negatively correlated should be be influenced by the number of null-transactions.
+    \item Kulczynski measure-based: If A and B are frequent but $(P(A|B) + P(B|A))/2< \epsilon$, where $\epsilon$ is a negative pattern threshold, then A and B are negatively correlated. Such measure is a null-invariant measure.
+   \end{itemize}
+ \end{itemize}
+\end{itemize}
+
+\item Constraint-based pattern mining
+\begin{itemize}
+ \item Two types of constraints, i.e., pattern space pruning constraints and data space pruning constraints.
+ \item Pattern space pruning strategies
+ \begin{itemize}
+  \item Pattern anti-monotonic, i.e., if an itemset S violates constraint C, so will its superset and hence, the mining on itemset S can be terminated. Note that Apriori pruning is anti-monotonic.
+  \item Pattern-monotone constraint: if an itemset S satisfies the constraint C, so does any of its superset. Hence, no need to check C in subsequent mining.
+  \item Data anti-monotone constraint: If a data entry $t$ cannot satisfy a pattern $p$ under C, then $t$ cannot satisfy $p's$ superset either.
+  \item Succinct constraints are those can be enforced by directly manipulating the data.
+  \item Convertible constraints are those can be transformed into (anti-) monotone constraints.
+ \end{itemize}
+\end{itemize}
+\end{enumerate}
+
+\section{Week 3 on May 11 2015}
+\begin{enumerate}
+\item Given a set of sequences, find the complete set of frequent subsequences satisfying the minimum support threshold. A sequence contains several element, each may contain a set of items.
+
+\item GSP-Apriori-based sequential pattern mining
+   \begin{itemize}
+      \item Get all singleton sequences
+      \item Scan DB to find frequent sequence of length k
+      \item Generate candidate of length k+1
+      \item Repeat until no frequent sequence candidate
+   \end{itemize}
+
+\item SPADE for vertical data format, by Zaki, similar to Eclat in association rule mining
+
+\item PrefixSpan
+   \begin{itemize}
+      \item No need to generate candidate subsequences
+      \item Projected DB keeps shrinking
+   \end{itemize}
+ 
+ \item Constraint-based sequential pattern mining 
+   \begin{itemize}
+      \item Anti-monotonic constraints
+      \item Monotonic constraints
+      \item Data anti-monotonic constraints
+      \item Succinct constraints: Enforce constraint by explicitly manipulating the data
+      \item Convertible constraints
+      \item Timing-based constraints
+       \begin{itemize}
+        \item Order constraints
+        \item Min-gap/max-gap constraint
+        \item Max-span constraint
+        \item Window size constraint, i.e., how to merge items into element
+       \end{itemize}
+   \end{itemize}
+   
+  \item Graph pattern mining
+   \begin{itemize}
+    \item  Apriori-based approach
+     \begin{itemize}
+      \item A size-k subgraph is frequent if and only if all of its subgraphs are frequent
+      \item Candidate generation is based on either vertex or edge growing, and the latter is shown to be more efficient
+     \end{itemize}
+     
+     \item gSpan approach, a depth-first growth of subgraphs from k-edge to (k+1)-edge, and then (k+2)-edge.
+    
+    \item CloseGraph for mining closed graph patterns. It aims to handle the pattern explosion problem.
+       
+    \item gIndex is a graph indexing method.
+    
+    \item SpiderMine is an algorithm to mine top-k largest structural patterns in a massive networks
+    
+   \end{itemize}
+   
+   \item Pattern-based classification
+    \begin{itemize}
+     \item The pattern extracted are then used as inputs for classification.
+     
+     \item Associative classification
+      \begin{itemize}
+       \item CBA, i.e., classification based on association rules; It uses high confidecne and high support rules to build classifiers.
+        \begin{itemize}
+         \item Mine high confidence and high support association rules, while the right hand side is that class label. 
+         \item Rank the rules in descending order of confidence and support.
+         \item Apply the first rule which match the test case to make prediction.
+         \item Can be more accurate than traditional classification methods, e.g., C4.5. One possible explanation is that by exploring high confidence and support associations among multiple attributes, it overcomes some constraints introduced by some classifiers which only considers one attribute at a time.
+        \end{itemize}
+        
+       \item CMAR, uses multiple rules to make prediction.
+       \begin{itemize}
+        \item CMAR is classification based on multiple association rules
+        \item The rules are pruned in two ways, first based on support and confidence (only use the more general rules), second based on $\chi ^2$ which aims to eliminate rules have non-positive correlation.
+        \item CMAR can improve model construction efficiency and classification accuracy.
+       \end{itemize}
+      \end{itemize}
+     
+     \item Discriminative pattern-based classification, i.e., PatClass
+     \begin{itemize}
+      \item Feature construction by frequent itemset mining
+      \item Feature selection using maximal marginal relevance (MMR)
+      \item Integrate with a general classification methods
+      \item k-itemsets are often more informative than single feature (1-itemsets) in classification
+     \end{itemize}
+     
+     \item Direct mining of discriminative patterns (DDPMine) (2008)
+     \begin{itemize}
+      \item Unlike the discriminative pattern-based classification, which first perorm frequent mining and then use certain criteria to select high quality discriminative patterns for classification, DDPMine directly mines high quality discriminative patterns.
+      \item Can be integrated with FP-growth algorithm
+      \item It can substantially increase the computational efficiency and high accuracy
+     \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\end{document}
