@@ -114,7 +114,136 @@
   \end{itemize}
 \end{enumerate}
  
+\section{Chapter 5 on May 19 2015}
+\begin{enumerate}
+ \item Any network of links can be represented as a graph $G=(V,E)$, where $V$ denotes the set of vertices (nodes) and $E$ denotes the set of edges (links). This abstraction enables us to directly reason about links using concepts from graph theory.
+ 
+ \item Link analysis has several distinct task
+  \begin{itemize}
+   \item Link-based object classification (LOC) is a technique used to assign class labels to nodes according to their link characteristics. 
+   \item Link-based object ranking (LOR) ranks objects in a graph based on several factors affecting their importance in the graph structure, whereas LOC assigns labels specifically belonging to a closed set of finite values to an object. The goal is to associate a relative quantitative assessment with each node. 
+   \item Link prediction
+  \end{itemize}
+ 
+ \item About social network analysis (SNA)
+  \begin{itemize}
+   \item Social network analysis (SNA), \emph{sna} package in $R$.
+   \item SNA studies the information flow and interactions between the members of a given network. Graphical representation of a social network is a popular way to understand and analyze the behavior of both the individuals and the overall network.
+   \item SNA is the representation and analysis of relationships/information flow between individuals, groups, organizations, servers, and other connected entities.
+   \item  
+  \end{itemize}
+  
+  \item Metrics for SNA
+   \begin{itemize}
+    \item Degree: the degress of a vertex is the number of edges incident to it.
+    \item Density: the density of a graph is the number of existing edges over the number of possible ones. 
+    \item Connectedness: the Krackhardt connectedness for a digraph $G$ is equal to the fraction of all dyads (a group of two nodes), $u$ and $v$, such that there exists an undirected path from $u$ to $v$ in $G$.
+    \item Betweenness centrality is a measure of the degree to which a given node lies on the shortest paths between the other nodes in the graph. Note that distance between two nodes in a graph is the minimum number of hops or edge traversals requied to reach the destination node from the starting node. Betweenness is a measure that represents the influence a node has over the connectivity of all the other nodes in a given network. A geodesic is the shortest path between any two nodes in a network. A node has high betweenness if the shortest paths (geodesics) between many pairs of the other nodes in the graph pass through that node. 
+    \item Egocentric network of vertex $v$ in graph $G$ is the subgraph of $G$ consisting of $v$ and its neighbors.
+    \item Closeness centrality (CLC) is a measure defined for nodes of a given graph. The higher the value of CLC for a node is, the closer the node is to the other nodes in the graph. For a node $v$, CLC is defined as the ratio of the total number of nodes in the graph minus one to the sum of the shortest distances (geodesics) of the node $v$ to every other node in the graph. CLC represents how reachable the nodes of the graph are from any given node under consideration.
+    $$ CLC(v) = \frac{|V|-1}{\sum_{i,v \neq v_i} distance(v,v_i)} $$
+   \end{itemize}
+   
+   \item The PageRank algorithm
+    \begin{itemize}
+     \item It is an algorithm that addresses the linl-based object ranking (LOR) problem. The objective is to assign a numerical rank or priority to each web page by exploiting the "link: structure of the web.
+     \item The fundamentals of this algorithm are based on the count and pquality of backlinks or inlinks to a web page. A backlink of a page $P_u$ is a citation to $P_u$from another page. The links from that page is called outlinks. 
+     \item The computational and mathematical backbone of PageRank is the power method, which computes an eigenvector of a matrix. It is a recursive procedure that can run for days in case of bigger matrices representing the Web. 
+     \item PageRank in $R$ is \texttt{page.rank}. 
+    \end{itemize}
+    
+    \item Vertices as authority and hubs
+     \begin{itemize}
+      \item A vertex is considered an authority if it has many pages that link to it (i.e., has a high indegree).
+      \item A vertex is considered an hun if it has many outgoing links (has a high outdegree).
+     \end{itemize}
+     
+     \item Link prediction
+      \begin{itemize}
+       \item Link prediction is used to predict new links in a graph. 
+       \item Some notations
+        \begin{itemize}
+         \item $G(t_i, t_j)$ represents the snapshot of graph G between time $t_i$ and $t_j$.
+         \item $core$ represents the set of vertices with at least a threshold number of edges
+         \item $k_{training}$ is the number of edges a vertex in the training set must have in order to be in the core set
+         \item $E_{old}$ represents the set of edges in the training set
+         \item $E_{new}$ represents the set of edges in the test set 
+        \end{itemize}
+        \item Link prediction can be performed based on proximity measures. Proximity measures are used to find similarity between a pair of objects. A threshold on the number of edges a vertex needs to be adjacent to (in both training and testing data) is defined so that the prediction process is performed on a subset of graph. The core set contains vertices that are adjacent to 3 or more edges in the graph. Given the training set $G(V,E_{old})$, the aim is to predict new edges among the vertices in core, in the test set. 
+        \item The proximity measures assign a numerical value $score(u,v)$ to the edge connecting a pair of nodes $u$ and $v$. A list $L$ is produced by ranking all such pairs in decreasing order of their scores. The score is defined as a negative value of the shortest path length. 
+        \item Some example proximity measures 
+         \begin{itemize}
+          \item Node neighborhood-based methods
+           \begin{itemize}
+            \item Common neighbors method is a simple measure which take into account the intersection set of the neighbors of the vertices $u$ and $v$. The score will be $score (u,v) = |N(u) \cap N(v)|$.
+            \item Jaccard coefficient is a proximity measure based on the node neighborhood principle. $J(A,B) = \frac{|A \cap B|}{|A \cup B|}$.To measure dissimilarity, just subtract $J(A,B)$ from 1. The Jaccard coefficent can be defined for vertices $u$ and $v$ similarly and used for formulating scores $score(u,v) = \frac{|N(u) \cap N(v)|}{|N(u) \cup N(v)|}$.
+            \item Adamic-Adar method computes the similarity between any two vertices using a common feature of the two, namely $z$. It is defined as $\sum_z \frac{1}{log(freq(z))}$, where $freq(z)$ is the frequency of occurrence of the common feature between $u$ and $v$. Hence $score(u,v) = \sum_{z \in N(u) \cap N(v)} \frac{1}{log(|N(z)|)}$.
+           \end{itemize}
+           
+           \item Ensemble of all path-based methodologies
+            \begin{itemize}
+             \item PageRank
+             \item SimRank
+            \end{itemize}
+            
+            \item Higher level methodologies
+             \begin{itemize}
+              \item Unseen bigrams
+              \item Clustering
+             \end{itemize}
+         \end{itemize}
+      \end{itemize}
+\end{enumerate}
 
+\section{Chapter 6 on May 19 2015}
+\begin{enumerate}
+ \item Two algorithms for measuring proximity between vertices in a graph
+  \begin{itemize}
+   \item Shared nearest neighbor (SNN) defines the similarity between two vertices in terms of the number of neighbors (i.e., directly connected vertices) they have in common.
+   \item The Neumann kernel is a generalization of the HITS that models the relatedness of vertices within a graph based on the number of immediate and more distant connections between vertices.
+  \end{itemize}
+  
+  \item The shared nearest neighbor graph: let $V= \{ v_1, v_2, \cdots, v_n \}$ be the set of nodes in a KNN graph G. In the SNN graph derived from$G$, the neighbors of $v_i$ are the nodes $v_j, j \neq i$ such that $v_i$ and $v_j$ have at least $k$ neighbors in common or equivalently, if there exist at least $k$ distinct paths of length two between $v_i$ and $v_j$ n $G$. SNN is used for undirected but possibly edge-weighted graphs.
+  
+  \item Evaluating relatedness using Neumann Kernels: It can be used for both directed and undirected graphs. 
+\end{enumerate}
 
+\section{Chapter 7 on May 19 2015}
+\begin{enumerate}
+ \item Frequent subgraph mining (FSM) is the process of discovering subgraphs that occur often in a database of other graphs. FSM can be used to highlight interesting structural properties in graph-based data. It is a type of unsupervised learning.
+ 
+ \item Graphs primarily convey structural information. Finding frequent substructures is often a reliable way to classify data that can be expressed as a graph. 
+
+\item All FSM techniques take a set of graphs as input and returns a set of graph that occur frequently in the input. All techniques share a common basic structure as follows
+ \begin{itemize}
+  \item Candidate generation
+  \item Candidate pruning
+  \item Support counting
+ \end{itemize}
+ 
+\item Pattern growth approach 
+ \begin{itemize}
+  \item Modern FSM algorithms begin with a single vertex and grow the graph one edge at a time. Each time a new edge is added, a new vertex may need to be added as well. After each extension, the frequency of the new graph is checked.
+  \item Efficiency is enhanced by avoiding checking graphs that are isomorphic to graphs which have already been checked.
+\end{itemize}  
+
+\item Frequent subgraph mining package in $R$ is \texttt{subgraphMining}. It contains the SUBDUE, gSpan, and SLEUTH algorithms.
+
+\item gSpan (Graph-based Substucture PAtterN)
+ \begin{itemize}
+  \item It is a depth-first pattern growth algorithm
+  \item It features an important innovation that significantly restricts the number of redundant subgraph candidates that must be examined.
+  \item It can significantly outperforming its Apriori-based predecessors and the parallel version exhibits good scalability.
+  \item Compared to other general pattern growth algorithms, the only major difference comes during the process of candidate generation, which avoids generating subgraphs that are isomorphic to other subgraphs already considered.
+  \item It represents graphs with a special encoding unique to gSpan that is called gSpan encoding. 
+  \item gSpan begins with a single edge (two vertices) subgraphs. Each subgraph is extended one edge at a time, and the support of the newly generated graphs is measured. If the support is equal or greater than \emph{min support}, that subgraph will be expanded further. Once it has been extended such that its support is less then \emph{min support}, the algorithm back-tracks until it has returned to a more promising subgraph, allowing gSpan to expand graphs in a depth-first manner.
+  \item The gSpan encoding: each edge is represented using five tuples, the first and second are the unique indices of starting and ending points, the third and fifth are the labels of vertices, and the fourth is the edge label.
+  \item The rightmost expansion: in a depth-first traversal, the starting node is called the root, and the last node is called the rightmost node. When considering depth-first seach tree, the shortest path from the root to the rightmost node is the rightmost path. When expanding a gSpan encoding via rightmost expansion, it is only possible to add a new edge if one of its endpoints lies on the rightmost path.
+  \item Lexicographic order
+  \item Minimum gSpan encoding (MgSE) is simply the smallest of all the possible gSpan Encoding (the lowest one in the lexicographic ordering). MgSE can be used to decide whether two graphs are isomorphic. Note that the MgSE is always the same for isomorphic graphs but different for non-isomorphic graphs. MgSE is the key to candidate pruning in gSpan.
+  \item 
+ \end{itemize}
+
+\end{enumerate}
 
 \end{document}
