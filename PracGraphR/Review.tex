@@ -241,9 +241,136 @@
   \item The rightmost expansion: in a depth-first traversal, the starting node is called the root, and the last node is called the rightmost node. When considering depth-first seach tree, the shortest path from the root to the rightmost node is the rightmost path. When expanding a gSpan encoding via rightmost expansion, it is only possible to add a new edge if one of its endpoints lies on the rightmost path.
   \item Lexicographic order
   \item Minimum gSpan encoding (MgSE) is simply the smallest of all the possible gSpan Encoding (the lowest one in the lexicographic ordering). MgSE can be used to decide whether two graphs are isomorphic. Note that the MgSE is always the same for isomorphic graphs but different for non-isomorphic graphs. MgSE is the key to candidate pruning in gSpan.
-  \item 
  \end{itemize}
+ 
+ \item SUBDUE algorithm
+  \begin{itemize}
+   \item Note that gSpan is an exact algorithm which find the complete set of frequent subgraphs in a database of graphs. It may be time-consuming for large data. In addition, some of the frequent subgraph may not be interesting, e.g., all the frequent 1-vertex subgraph.
+   \item The most iwidely used FSM algorithms, which designed for real-world problems, is the SUBDUE. It uses a constrained form of beam search to discover frequent subgraphs. It reports structures based on the amount of compression they provide for the original gragh. If a subgraph allows for a lot of compression, it is assumed to be interesting and therefore deserves to be further explored. SUBDUE is an efficient but sometimes inexact method.
+   \item SUBDUE is fast due to the adoption of beam search. Beam search is a best-first version of breadth-first search, so only the best $k$ children are expanded at each level of the search. The rest are ignored. $k$ is called the beam width of the algorithm.
+   \item SUBDUE starts with all the frequent single vertex subgraphs and expand them one edge at a time. SUBDUE only explores the best $k$ of these expanded subgraphs.
+   \item The other novel feature is that SUBDUE decides which subgraphs are interesting based on the compression they provided. Compression simply means representing data using a smaller number of bits, analogous to file compression techniques. The subgraphs that SUBDUE considers important are the ones that allow it to compress the original set of graphs into fewest number of bits.
+   \item Description length of a graph $G$ is denoted as $DL(G)$. The value of $DL(G)$ is the integer number of bits required to represent graph $G$ in some binary format. 
+  \end{itemize}
+  
+  \item SLEUTH algorithm
+   \begin{itemize}
+    \item Designed for tree-type graphs
+    \item Can be used to mine frequent subtrees within a collection of trees
+   \end{itemize}
+\end{enumerate}
 
+\section{Chapter 8 on May 21 2015}
+\begin{enumerate}
+ \item Two types for graph data, i.e., within-graph clustering and between-graph clustering.
+ 
+ \item Minimum spanning tree clustering
+  \begin{itemize}
+   \item Spanning tree is a conncected subgraph with no cycles that includes all vertices in the graph
+   \item Minimum spanning tree (MST) is the spanning tree with the minimum possible sum of edge weights, if the edge weights represent distance and maximum possible sum of edge weights, if the edge weights present similarity.
+   \item The canonical algorithm to find MST in an undirected weighted graph is Prim's algorithm. In $R$, the Prim algorithm is implemented in package $igraph$.
+   \item Clusters can be created by working on the MST obtained. The removal of $k-1$ edges will create $k$ clusters. The removal begins with those with the larger weights. Can be performed in $R$ using $GraphClusterAnalysis: k_clusterSpanningTree$.
+  \end{itemize}
+  
+  \item Note that MST-based clustering defines similarity between vertices based on the high-weight edges and paths between vertex pairs. Removal of possibly large number of edges results in loss of information in the resulting clusters. A more general notion of similarity between vertex pairs can be captured by the $shared nearest neighbor clustering$
+   \begin{itemize}
+    \item Unlike the weight-based measures, it provides a natural and robust way of preventing noise in the data set (e.g., the removal or addition of edges into the graph) from affecting the clustering results.
+    \item The idea is to place a pair of objects into the same cluster, if the number of common neighbors they share is more than some threshold. It can work on both edge-weighted graphs using some proximity measure (e.g. cosine similarity) and unweighted graphs.
+    \item The Jarvis-Patrick clustering is a popular within-graph SNN clustering algorithm. In $R$, can be performed using $igraph, RBGL, GraphClusteringAnalysis$ packages.  
+   \end{itemize}
+   
+  \item Between centrality clustering
+   \begin{itemize}
+    \item Betweenness centrality quantifies the degree to which a vertex occurs on the shortest path between all the other pairs of nodes. The graph can be clustered by removing nodes with high betweenness centrality, under the assumption that such nodes typically separate different clusters in the graph. 
+    \item Girvan and Newman developed a clustering algorithm using edge between centrality. The between centrality of all edges is calculated and the one with the highest edge-betweenness centrality is removed. The process is performed iteratively until the highest edge-betweenness centrality in the graph falls below a user-defined threshold. One shortcoming is that the method divides the graph into non-overlapping clusters.
+    \item To overcome this limitation, Pinney and Westhead uses the vertex-betweenness centrality in a graph while retaining the vertices that the algorithm partitions based on. It iteratively divides the graph at the vertex with the maximum betweenness centrality. At the end of the algorithm, each removed vertex $v$ is inserteed into all clusters that share at least one edge with $v$.
+    \item The algorithm can be performed using $R$ packages $graph, GraphClusterAnalysis, RBGL$.
+   \end{itemize}
+  
+  \item Clustering vertices with kernel k-means
+   \begin{itemize}
+    \item k-means clustering can be used to cluster the vertices in a graph, given an appropriate definition of vertex similarity through kernel functions.
+    \item Implemented in $R$ using packages $igraph, RBGL, GraphClusterAnalysis, graph, kernlab$.
+    \item One drawback is that the graph-based k-mean clustering suffers from the poor initial centroid placement and is prone to local minima. One common strategy is to generate several random sets of centroids and pursue the most promising based on a predetermined measure of cluster quality. 
+   \end{itemize}
+   
+  \item How to choose the clustering algorithms
+   \begin{itemize}
+    \item Complete (e.g., graph-based k-means) or partial clustering (e.g., maximal clique enumeration).
+    \item Overlapping (e.g., maximal clique enumeration and vertex betweenness-based centrality algorithms) or exclusive clustering (e.g., k-means).
+   \end{itemize}
+\end{enumerate}
+
+\section{Chapter 9 on May 21 2015}
+\begin{enumerate}
+ \item Two types, i.e., classifying multiple graphs and classifying individual vertices within a single graph. Kernel-based classification techniques are mainly adopted as they have been successfully applied in practice and are based on an implicit graph-to-vector mapping, allowing us to use well known numerical-vector-based classification methods.
+ \item Graph classification is to classify a number of individual graphs.
+ \item Graph classification using direct product kernel
+ \item Vertex classification using the regularized Laplacian kernel
+\end{enumerate}
+
+\section{Chapter 11 on May 21 2015}
+\begin{enumerate}
+ \item Graph-based anomaly detection
+  \begin{itemize}
+   \item "White crow anomaly" is an observation that deviates so much from other observations as to arouse suspicion that it was generated by a different mechanism.
+   \item "In-disguise anomaly" is an observation that is only a minor deviation from the normal pattern.
+   \item "Pointwise anomaly" is a point in time at which the observed values are significantly different than the rest of the timestampls in the time series. 
+  \end{itemize}
+ 
+ \item Random walk algorithm can be used to find "white crow anomaly" in dataset without any temporal aspect.
+ 
+ \item GBAD algorithm is applied to find "in-disguise anomalies".
+  \begin{itemize}
+   \item It is an unsupervised method based on the SUBDUE system, which designed to find anomalies due to modification, insertion, or deletion. 
+   \item GBAD-MDL uses the MDL approach to find the best substructure in the graph and subsequently searches for all the other substructures that look similar to the best. The best substructure is the one that occurs the most frequently and causes maximum compression in the graph using the MDL principal.
+   \item GBAD-P follows the basic principle of MDL by finding the best substructure in the graph. For each occurrence of that substructure, its extension is examined. The extension can be in the form of adding vertex or edge. A probability of occurrence is calculated for each extension and the one with the lower probability is considered anomalous. 
+   \item GBAD-MPS also uses the MDL to find the best substructure $S$ in the graph. The parent substructure of $S$ has the exact same structure of $S$ with one or model nodes or edges removed. The algorithm finds the substructure that match the parent substructure of $S$. Cost is associated with addition of vertex or edge. The substructure that occur infrequently and require a higher cost to transform are considered anomalous.
+  \end{itemize}
+  
+ \item Research on "white crow" anomalies is mainly focused on exploring three different anomalies, i.e., anomalous nodes, edges, and subgraphs. 
+ 
+ \item "In-disguise" anomalies are more difficult to detect. The GBAD methods are designed to find such anomalies which may include label modification, vertex or edge insertion, and vertex or edge deletion. Note that they are not designed to find anomalies in multiple graphs.
+\end{enumerate}
+
+\section{Chapter 12 on May 21 2015}
+\begin{enumerate}
+ \item Supervised learning performance matrics
+  \begin{itemize}
+   \item Confusion matrix for classification problems
+    \begin{itemize}
+     \item $accuracy = \frac{TP+TN}{TP+TN+FP+FN}$
+     \item $accuracy = \frac{FP+FN}{TP+TN+FP+FN}$
+     \item Recall quantifies the notion of sensitivity. It contains positive recall (true positive rate) and negative recall (true negative rate).  $$TPR = \frac{TP}{TP+FP}$$ $$NR=\frac{TN}{TN+FN}$$
+     \item Misclassification rate is analogous to recall and has false positive rate and false negative rate. 
+     $$FPR = \frac{FP}{TN+FP}$$ $$TNR=\frac{FN}{TP+FN}$$
+     \item Precision quantifies the notion of specificity. $P^+ = \frac{TP}{TP+FN}$ or $P^- = \frac{TN}{TN+FP}$
+     \item $F-measure$ is the harmonic mean of precision and recall values of a class and provides a way to judge the overall performance of the model for each class. 
+     $$F^+ = \frac{2 \times P^+ \times TPR}{P^+ + TPR}$$
+     $$F^- = \frac{2 \times P^- \times TNR}{P^- + TNR}$$
+     \item $G-mean$ is the geometric mean of TPR and TNR (positive and negative recalls): $G-mean = \sqrt[2]{TPR \times TNR}$. This one is a better way to quantify the performance of the model since it is less prone to the effects of the underlying class distribution. It works especially well for imbalanced classification problems.
+     \item Critical success index (CSI) is also called the threat score, is the proportion of the correct predictions of class $L$ of the sum of all predicted values of $L$ and all values of $L$ not correctly predicted. It is useful for multi-class classification problems.
+     \item Hit rate (HR) is the success rate of each class.
+     \item Bias is the ratio of the total points with label $L$ to the number of points predicted as $L$. If $> 1$ means under-prediction and $<1$ means over-prediction for a certain class $L$.
+    \end{itemize}
+  \end{itemize}
+ 
+ \item Unsupervised learning performance metrics
+  \begin{itemize}
+   \item Evaluation using prior knowledge
+    \begin{itemize}
+     \item Contingency table
+     \item Rand statistic is also called the simple matching coefficient. It is a measure where both placing a pair of points with the same class label in the same cluster and placing a pair of points with different class labels in different clusters are given equal importance, i.e., it accounts for both specificity and sensitivity of clustering.
+     \item Jaccard coefficient is used when placing a pair of points with the same class label in the same cluster is primarily important.
+     \item Entropy, 0 means homogeneous and 1 means impurity.
+     \item For clusters
+      \begin{itemize}
+       \item Cohesion and separation
+       \item Dunn index ranges from 0 to infinity and should be maximized.
+       \item Silhouette coefficient
+      \end{itemize}
+    \end{itemize}    
+  \end{itemize}
 \end{enumerate}
 
 \end{document}
