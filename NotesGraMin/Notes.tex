@@ -32,8 +32,78 @@
    \item Community detection
    \item Export
   \end{itemize}
-
 \end{enumerate}
 
+\section{Practical statistical network analysis (with R and igraph)}
+\begin{enumerate}
+ \item \texttt{igraph} is for classic graph theory and network science. Its core functionality is implemented in C and has high level interfaces with $R$ and $Python$.
+ \item Note that in the old version of \texttt{igraph}, vertices are always numbered from zero.
+ \item Name vertices: \texttt{V(g)\$name}
+ \item Graph representations
+  \begin{itemize}
+   \item Adjacency matrix
+   \item Edge list
+   \item Adjacency list
+  \end{itemize}
+ \item Some metrics
+  \begin{itemize}
+   \item degree
+   \item closeness
+   \item betweenness
+   \item eigenvector centrality
+   \item page rank
+  \end{itemize}
+\end{enumerate}
 
+\section{Graph and web mining - motivation, applications and algorithms}
+\begin{enumerate}
+ \item The structure of the data is just as important as its content
+ \item The discovered pattern can be used as compact representation of the information, find strongly connected groups and etc.
+ \item Frequent patterns refer to a set of items, subsequences, and substructures that occur frequently in a data set. 
+ \item Motivations for graph mining
+  \begin{itemize}
+   \item Most of existing DM algorithms are based on flat transaction representation, i.e., sets of items. 
+   \item Data with structures, layers, hierarchy or geometry often do not fit well in this flat transaction setting.
+  \end{itemize}
+ \item Graph mining is essentially the problem of discovering repetitive subgraphs occuring in the input graphs.
+ \item The main difference between association rules and graph patterns is that gaph patterns are topology-based, which means graph patterns have structure in addition to atomic values.
+ \item Graph mining
+  \begin{itemize}
+   \item Frequent subgraph mining
+    \begin{itemize}
+     \item Apriori-based, e.g., AGM, FSG, PATH
+     \item Pattern growth-based, e.g., gSpan, MoFa, GASTO, FFSM, SPIN
+     \item Approximate methods, e.g., SUBDUE, GBI
+    \end{itemize}
+   \item Variant subgraph pattern mining
+    \begin{itemize}
+     \item Closed subgraph mining, e.g., CloseGraph
+     \item Coherent subgraph mining, e.g., CSA, CLAN
+     \item Dense subgraph mining, e.g., CloseCut, Splat, CODENS
+    \end{itemize}
+   \item Applications of FSM
+    \begin{itemize}
+     \item Clustering
+     \item Classification, e.g., kernel methods (graph kernels)
+     \item Indexing and search, e.g., gIndex
+    \end{itemize}
+  \end{itemize}
+\end{enumerate}
+
+\section{Introduction to igraph}
+\begin{enumerate}
+ \item Creating a graph
+  \begin{itemize}
+   \item Attributes include color and weight
+   \item \texttt{plot(g, edge.width=2+3*E(g)\$weight, vertex.label=NA, vertex.size=2)}
+  \end{itemize}
+ \item Measuring graphs
+  \begin{itemize}
+   \item \texttt{diameter}
+   \item \texttt{transitivity}: cluster coefficient or transitivity
+   \item \texttt{average.path.length}
+   \item \texttt{degree}
+   \item \texttt{degree.distribution}
+  \end{itemize}
+\end{enumerate}
 \end{document}
