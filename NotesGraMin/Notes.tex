@@ -1,0 +1,39 @@
+\documentclass[14pt]{article}
+
+\begin{document}
+\title{Some Notes on Graph Mining}
+\maketitle
+
+\section{Into2GraphMining}
+\begin{enumerate}
+ \item A graph is said to be connected if there is path between every pair of vertices
+ \item Two graphs $G_1(V_1,E_1)$ and $G_2(V_2,E_2)$ are said to be isomorphic if they are topologically identicle, which means a mapping from $V_1$ to $V_2$ exists so that each edge $E_1$ is mapped to a single edge in $E_2$ and vice-versa.
+ \item Frequent subgraph mining (FSM)
+  \begin{itemize}
+   \item Given a set of undirected and labeled graphs ($D$) and a support threshold $\sigma$, find all connected and undirected graphs that are subgraphs in at least $\sigma \times D$ of input graphs.
+  \end{itemize}
+\end{enumerate}
+
+\section{Complex networks tools for analyzing networks (R+igraph)}
+\begin{enumerate}
+ \item \texttt{igraph} can be used to handle undirected and directed graphs. It includes implementations for classic graph theory problems like minimum spanning trees and network flow and community structure search.
+ \item Procefures for analyzing network
+  \begin{itemize}
+   \item Create a graph object
+   \item Layout the network: use \texttt{igraph: tkplot}
+   \item Ranking: use  \texttt{igraph: page.rank}
+   \item Metrics
+    \begin{itemize}
+     \item \texttt{igraph: diameter(g)}
+     \item \texttt{igraph: graph.density(g)}, i.e., $\frac{No.edges}{No.vertex \times (No.vertex-1)}$
+     \item \texttt{igraph: average.path.length(g)}
+     \item \texttt{igraph: transitivity(g)}
+    \end{itemize}
+   \item Community detection
+   \item Export
+  \end{itemize}
+
+\end{enumerate}
+
+
+\end{document}
