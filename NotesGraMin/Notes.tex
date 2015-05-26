@@ -106,4 +106,86 @@
    \item \texttt{degree.distribution}
   \end{itemize}
 \end{enumerate}
+
+\section{Community detection algorithms in igraph}
+\begin{enumerate}
+ \item Algorithms 
+ \begin{itemize}
+  \item \texttt{edge.between.community}, 2004
+  \item \texttt{fashgreedy.community}, 2004, i.e., modularity optimization method
+  \item \texttt{label.propagation.community}, 2007
+  \item \texttt{leading.eigenvector.community}, 2006
+  \item \texttt{multilevel.community}, 2008, i.e., the Louvain method
+  \item \texttt{optimal.community}, 2008
+  \item \texttt{singlass.community}, 2006
+  \item \texttt{walkstrap.community}, 2005
+  \item \texttt{infomap.community}, 2008
+ \end{itemize}
+ 
+ \item Evaluation criteria
+  \begin{itemize}
+   \item \texttt{modularity}
+   \item \texttt{conductance}
+   \item \texttt{cut ratio}
+   \item \texttt{expansion}
+  \end{itemize}
+\end{enumerate}
+
+\section{Graph mining and graph kernels}
+\begin{enumerate}
+ \item FSM algorithms
+  \begin{itemize}
+   \item Apriori-based approaches, e.g., AGM/AcGM, FSG, PATH, FFSM, FTOSM
+   \item Pattern growth approaches, e.g., SUBDUE, gSpan, MoFa, Gaston, CMTreeMiner, LEAP
+  \end{itemize}
+ 
+ \item For Apriori-based approaches, the logic behind is that if a graph is frequent, all of its subgraphes are frequent.
+ 
+ \item Properties of graph mining algorithms
+  \begin{itemize}
+   \item Search order: breadth or depth, complete or incomplete
+   \item Candidate generation mechanism: apriori or pattern growth
+   \item Discovery order of patterns: DFS oder, or $path \rightarrow tree \rightarrow graph$
+   \item Elimination of duplicate subgraphs: passive or active
+   \item Support calculation: embedding store or not
+  \end{itemize}
+ 
+ \item Pattern summarization aims to use a small set of representative patterns which preserve most of the information to represent the original data
+ 
+ \item A frequent graph $G$ is closed if there exists no supergraph of $G$ that carries the same support of $G$.
+ 
+ \item A frequent graph $G$ is maximal if there exists no supergraph of $G$ that is frequent.
+ 
+ \item Graph kernels aim to compute similarity scores between graphs
+ 
+ \item Two graphs $G_1$ and $G_2$ are said to be isomorphic if there is a mapping function $f$, such that for each edge $(x,y)$ in $G_1$, there is a corresponding edge in $G_2$ and it is $(f(x), f(y))$. $f$ is said to be the isomorphism. Note that there is no polynomial-time algorithm in solving graph isomorphism. It is known to be NP-complete.
+ 
+ \item Subgraph isomorphism asks if there is a subset of edges and vertices of $G_1$ that is isomorphic to a smaller graph $G_2$. Subgraph isomorphism is also NP-complete.
+ 
+ \item Graph edit distances
+  \begin{itemize}
+   \item The principle is to count the operations to transform $G_1$ to $G_2$. Assign costs to different types of operations, including edge/node insertion or deletion, modification of labels. 
+   \item It can partially capture the similarities between graphs. It allos for noise in the nodes, edges and their labels. 
+   \item One disadvantage is that it has to contain a subgraph isomorphism chec step as one intermediate step. In addition, choosing cost function for different operations can be difficult.
+  \end{itemize}
+  
+ \item Topological descriptors
+  \begin{itemize}
+   \item The principle is to map each graph to a feature vector and use distances and metrics on vector for learning in graphs.
+   \item The advantage is that it can utilize the tools for feature vectors
+   \item The disadvantage is that the feature vector transformation leads to information loss
+  \end{itemize}
+ 
+ \item Polynomial alternatives
+  \begin{itemize}
+   \item Graph kernels compare the substructures in polynomial time
+   \item A good graph kernel should be expressive, efficient to compute, positive definite, and applicable to wide range of graphs 
+  \end{itemize}
+ 
+\end{enumerate}
+
+
+
+
+
 \end{document}
