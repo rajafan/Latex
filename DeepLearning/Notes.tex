@@ -1,0 +1,16 @@
+\documentclass[12pt]{article}
+
+\begin{document}
+\title{Notes on UFLDL Tutorial from Stanford University}
+\maketitle
+
+\section{Linear regression}
+\begin{enumerate}
+ \item Linear function: $h_\theta (x) = \sum_j {\theta_j x_j} $
+ \item The cost function: $J(\theta) = \frac{1}{2} \sum_i{(h_\theta (x^{(i)}) - y^{(i)})^2}$
+ \item Gradient descent is used to minimize the cost function
+ \item The gradient of the cost function $\nabla_\theta J(\theta)$ is the differential of function $J(\theta)$ and it is a vector that points in the direction of steepest increase as a function of $\theta$.$$\frac{\partial J(\theta)}{\partial \theta_j} = \sum_i {x_j^{(i)} (h_\theta (x^{(i)} - y^{(i)}))}$$ 
+\end{enumerate}
+
+
+\end{document}
